@@ -1,2 +1,3 @@
 rootProject.name = 'Kebug'
+include ':kotlin-plugin ', ':gradle-plugin'
 
