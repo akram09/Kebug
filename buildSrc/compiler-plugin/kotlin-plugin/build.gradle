@@ -3,13 +3,12 @@ apply plugin: "kotlin-kapt"
 apply plugin: "maven"
 
 
-group = "com.kero"
-archivesBaseName = "kotlin-compiler-plugin"
+group = "com.kero.kebug"
 version = "0.0.1"
 
 install {
     repositories.mavenInstaller {
-        pom.artifactId = 'kotlin-compiler-plugin'
+        pom.artifactId = 'kebug-kotlin-plugin'
     }
 }
 

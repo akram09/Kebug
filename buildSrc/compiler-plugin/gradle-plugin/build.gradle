@@ -4,21 +4,20 @@ apply plugin: "kotlin-kapt"
 apply plugin: "maven"
 
 
-group = "de.jensklingenberg"
-archivesBaseName = "gradle-plugin"
-version = "1.0.0"
+group = "com.kero.kebug"
+version = "0.0.1"
 
 
 install {
     repositories.mavenInstaller {
-        pom.artifactId = 'gradle-plugin'
+        pom.artifactId = 'kebug-gradle-plugin'
     }
 }
 
 gradlePlugin {
     plugins {
         simplePlugin {
-            id = "com.kero.kebug"
+            id = "kebug-plugin"
             implementationClass = "com.kero.kebug.KebugGradlePlugin" // entry-point class
         }
     }
@@ -27,6 +26,6 @@ gradlePlugin {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "org.jetbrains.kotlin:kotlin-gradle-plugin-api"
-    compileOnly "com.google.auto.service:auto-service:1.0-rc4"
-    kapt "com.google.auto.service:auto-service:1.0-rc4"
+    compileOnly "com.google.auto.service:auto-service:1.0-rc6"
+    kapt "com.google.auto.service:auto-service:1.0-rc6"
 }
