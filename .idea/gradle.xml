@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/buildSrc/compiler-plugin" />
             <option value="$PROJECT_DIR$/buildSrc/compiler-plugin/gradle-plugin" />
+            <option value="$PROJECT_DIR$/buildSrc/compiler-plugin/kebug-core" />
             <option value="$PROJECT_DIR$/buildSrc/compiler-plugin/kotlin-plugin" />
           </set>
         </option>

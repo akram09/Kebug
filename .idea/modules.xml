@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/buildSrc/compiler-plugin/gradle-plugin/gradle-plugin.iml" filepath="$PROJECT_DIR$/buildSrc/compiler-plugin/gradle-plugin/gradle-plugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/buildSrc/compiler-plugin/kotlin-plugin/kotlin-plugin.iml" filepath="$PROJECT_DIR$/buildSrc/compiler-plugin/kotlin-plugin/kotlin-plugin.iml" />
-    </modules>
-  </component>
-</project>
