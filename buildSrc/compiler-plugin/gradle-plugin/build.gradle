@@ -5,6 +5,7 @@ apply plugin: "maven"
 
 
 group = "com.kero.kebug"
+archivesBaseName = "kebug-plugin"
 version = "0.0.1"
 
 

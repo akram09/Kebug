@@ -24,7 +24,7 @@ class KebugGradleSubPlugin :KotlinGradleSubplugin<AbstractCompile>{
         return listOf(extensionSubPluginOption)
     }
 
-    override fun getCompilerPluginId() = "kebug"
+    override fun getCompilerPluginId() = "kebug-plugin"
 
     override fun getPluginArtifact(): SubpluginArtifact {
         return SubpluginArtifact(

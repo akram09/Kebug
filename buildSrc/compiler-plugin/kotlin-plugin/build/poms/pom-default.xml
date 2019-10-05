@@ -17,5 +17,11 @@
       <version>1.3.50</version>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>com.kero.kebug</groupId>
+      <artifactId>kebug-core</artifactId>
+      <version>0.0.1</version>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
 </project>

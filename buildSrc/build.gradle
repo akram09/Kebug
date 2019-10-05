@@ -11,6 +11,11 @@ allprojects {
         maven { url "https://plugins.gradle.org/m2/" }
     }
 }
+install {
+    repositories.mavenInstaller {
+        pom.artifactId = 'kebug-core'
+    }
+}
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
@@ -21,6 +26,6 @@ compileTestKotlin {
 
 build {
     dependsOn ':compiler-plugin:kotlin-plugin:install'
-
     dependsOn ':compiler-plugin:gradle-plugin:install'
+    dependsOn  ':compiler-plugin:kebug-core:install'
 }

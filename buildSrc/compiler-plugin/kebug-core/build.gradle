@@ -1,9 +1,18 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm'
 }
+apply plugin: "maven"
 
-version 'unspecified'
+group = "com.kero.kebug"
+version="0.0.1"
+archivesBaseName="kebug-core"
 
+
+install {
+    repositories.mavenInstaller {
+        pom.artifactId = 'kebug-core'
+    }
+}
 repositories {
     mavenCentral()
 }
