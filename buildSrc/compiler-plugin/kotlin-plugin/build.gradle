@@ -8,7 +8,7 @@ version = "0.0.1"
 
 install {
     repositories.mavenInstaller {
-        pom.artifactId = 'kebug-kotlin-plugin'
+        pom.artifactId = 'kebug-plugin'
     }
 }
 

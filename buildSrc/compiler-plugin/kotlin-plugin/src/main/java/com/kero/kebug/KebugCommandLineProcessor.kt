@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.config.CompilerConfigurationKey
 
 @AutoService(CommandLineProcessor::class)
 class KebugCommandLineProcessor :CommandLineProcessor {
-    override val pluginId= "kebug"
+    override val pluginId= "kebug-plugin"
     override val pluginOptions = listOf(
         CliOption("enabled", "<true|false>", "it describe whether the compiler is enabled or not")
     )

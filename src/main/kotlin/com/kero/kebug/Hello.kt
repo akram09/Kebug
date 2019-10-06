@@ -1,11 +1,5 @@
 package com.kero.kebug
-
+@Kebug
 fun main() {
-    print("hello")
-}
-class HelloWorld{
-    @Kebug(KebugLevel.DEBUG)
-    fun testingKebug(){
 
-    }
 }

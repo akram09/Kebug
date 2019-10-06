@@ -29,8 +29,8 @@ repositories {
     mavenCentral()
     jcenter()
 }
-kebug{
-    enabled true
+kebug {
+    enabled = true
 }
 
 dependencies {
