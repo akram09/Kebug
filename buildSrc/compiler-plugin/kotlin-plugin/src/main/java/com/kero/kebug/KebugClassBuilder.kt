@@ -1,6 +1,7 @@
 package com.kero.kebug
 
 import jdk.internal.org.objectweb.asm.Opcodes
+import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.codegen.ClassBuilder
@@ -13,13 +14,14 @@ import org.jetbrains.org.objectweb.asm.MethodVisitor
 import org.jetbrains.org.objectweb.asm.Type
 import org.jetbrains.org.objectweb.asm.Type.LONG_TYPE
 import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
+import java.lang.StringBuilder
 
 class KebugClassBuilder(val kebugBuilder:ClassBuilder , val messageCollector: MessageCollector) : DelegatingClassBuilder() {
     override fun getDelegate() = kebugBuilder
 
-    private fun log(msg:String){
+    private fun log(msg:Any?){
         messageCollector.report(
-            CompilerMessageSeverity.ERROR , msg
+            CompilerMessageSeverity.WARNING , msg.toString()
         )
     }
 
@@ -34,7 +36,7 @@ class KebugClassBuilder(val kebugBuilder:ClassBuilder , val messageCollector: Me
         exceptions: Array<out String>?
     ): MethodVisitor {
         val original  = super.newMethod(origin, access, name, desc, signature, exceptions)
-        val function = origin as? FunctionDescriptor ?: return original
+        val function = origin.descriptor as? FunctionDescriptor ?: return original
         if(!function.annotations.hasAnnotation(KEBUG_ANNOTATION)){
             return original
         }
@@ -50,17 +52,21 @@ class KebugClassBuilder(val kebugBuilder:ClassBuilder , val messageCollector: Me
         }
     }
     private fun InstructionAdapter.addLogToStartMethode(function : FunctionDescriptor){
-        getstatic("java/lang/System", "out" , "Ljava/io/PrintStream")
-        anew(Type.getType("java/lang/StringBuilder"))
+        getstatic("java/lang/System", "out", "Ljava/io/PrintStream;")
+
+        anew(Type.getType(StringBuilder::class.java))
         dup()
         invokespecial("java/lang/StringBuilder", "<init>", "()V", false)
+
         visitLdcInsn("⇢ ${function.name}(")
+
         invokevirtual(
             "java/lang/StringBuilder",
             "append",
             "(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
             false
         )
+
         function.valueParameters.forEachIndexed { i, parameter ->
             visitLdcInsn("${parameter.name}=")
             invokevirtual("java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false)
@@ -103,9 +109,6 @@ class KebugClassBuilder(val kebugBuilder:ClassBuilder , val messageCollector: Me
         invokevirtual("java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false)
 
         invokevirtual("java/io/PrintStream", "println", "(Ljava/lang/String;)V", false)
-
-        invokestatic("java/lang/System", "currentTimeMillis", "()J", false)
-        store(6001, LONG_TYPE)
     }
 
 }
