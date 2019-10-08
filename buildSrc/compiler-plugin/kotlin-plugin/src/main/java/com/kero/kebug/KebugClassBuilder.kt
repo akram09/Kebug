@@ -71,7 +71,7 @@ class KebugClassBuilder(val kebugBuilder:ClassBuilder , val messageCollector: Me
             visitLdcInsn("${parameter.name}=")
             invokevirtual("java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false)
 
-            val varIndex = i + 1
+            val varIndex = i
             when (parameter.type.unwrap().nameIfStandardType.toString()) {
                 "Int" -> {
                     visitVarInsn(Opcodes.ILOAD, varIndex)

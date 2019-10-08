@@ -1,13 +1,11 @@
 package com.kero.kebug
 
-import java.lang.StringBuilder
 
-@Kebug
-fun sayHello(b:Int){
-
+@Kebug fun sayHello(b: Int, a:Long) {
 }
+
 fun main() {
-    sayHello(5)
+    sayHello(0, 5)
 }
 
 
