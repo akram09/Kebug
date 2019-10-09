@@ -1,15 +1,19 @@
 package com.kero.kebug
 
 import jdk.internal.org.objectweb.asm.Opcodes
+import org.jetbrains.kotlin.builtins.getFunctionalClassKind
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.codegen.ClassBuilder
 import org.jetbrains.kotlin.codegen.DelegatingClassBuilder
+import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.isTopLevelInPackage
 import org.jetbrains.kotlin.js.descriptorUtils.nameIfStandardType
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.resolve.descriptorUtil.isInsidePrivateClass
+import org.jetbrains.kotlin.resolve.descriptorUtil.parents
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.JvmDeclarationOrigin
 import org.jetbrains.org.objectweb.asm.MethodVisitor
 import org.jetbrains.org.objectweb.asm.Type
@@ -41,6 +45,10 @@ class KebugClassBuilder(val kebugBuilder:ClassBuilder , val messageCollector: Me
         if(!function.annotations.hasAnnotation(KEBUG_ANNOTATION)){
             return original
         }
+        function.parents.forEach {
+            if(it is ClassDescriptor) log(it)
+        }
+
         return object : MethodVisitor(Opcodes.ASM5, original){
             override fun visitCode() {
                 super.visitCode()
@@ -67,7 +75,7 @@ class KebugClassBuilder(val kebugBuilder:ClassBuilder , val messageCollector: Me
             visitLdcInsn("${parameter.name}=")
             invokevirtual("java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false)
 
-            val varIndex = i
+            val varIndex = i+1
             when (parameter.type.unwrap().nameIfStandardType.toString()) {
                 "Int" -> {
                     visitVarInsn(Opcodes.ILOAD, varIndex)
