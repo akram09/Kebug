@@ -1,6 +1,5 @@
-package com.kero.kebug
+package com.kero.kebug.backend
 
-import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.codegen.ClassBuilder
 import org.jetbrains.kotlin.codegen.ClassBuilderFactory
@@ -16,7 +15,7 @@ class KebugExtension(val messageCollector: MessageCollector) :ClassBuilderInterc
         diagnostics: DiagnosticSink
     ) = object:ClassBuilderFactory by interceptedFactory{
         override fun newClassBuilder(p0: JvmDeclarationOrigin):ClassBuilder {
-           return  KebugClassBuilder(interceptedFactory.newClassBuilder(p0),messageCollector )
+           return KebugClassBuilder(interceptedFactory.newClassBuilder(p0), messageCollector)
         }
     }
 }

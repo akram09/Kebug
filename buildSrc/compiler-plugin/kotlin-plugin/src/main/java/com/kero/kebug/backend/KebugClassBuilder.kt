@@ -1,23 +1,18 @@
-package com.kero.kebug
+package com.kero.kebug.backend
 
 import jdk.internal.org.objectweb.asm.Opcodes
-import org.jetbrains.kotlin.builtins.getFunctionalClassKind
-import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.codegen.ClassBuilder
 import org.jetbrains.kotlin.codegen.DelegatingClassBuilder
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
-import org.jetbrains.kotlin.descriptors.isTopLevelInPackage
 import org.jetbrains.kotlin.js.descriptorUtils.nameIfStandardType
 import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.resolve.descriptorUtil.isInsidePrivateClass
 import org.jetbrains.kotlin.resolve.descriptorUtil.parents
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.JvmDeclarationOrigin
 import org.jetbrains.org.objectweb.asm.MethodVisitor
 import org.jetbrains.org.objectweb.asm.Type
-import org.jetbrains.org.objectweb.asm.Type.LONG_TYPE
 import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
 import java.lang.StringBuilder
 
@@ -56,6 +51,9 @@ class KebugClassBuilder(val kebugBuilder:ClassBuilder , val messageCollector: Me
             }
         }
     }
+
+
+
     private fun InstructionAdapter.addLogToStartMethode(function : FunctionDescriptor){
         getstatic("java/lang/System", "out", "Ljava/io/PrintStream;")
 

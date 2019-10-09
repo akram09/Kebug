@@ -1,4 +1,4 @@
-package com.kero.kebug
+package com.kero.kebug.extensions
 
 import com.google.auto.service.AutoService
 import org.jetbrains.kotlin.compiler.plugin.AbstractCliOption
@@ -16,7 +16,7 @@ class KebugCommandLineProcessor :CommandLineProcessor {
 
     override fun processOption(option: AbstractCliOption, value: String, configuration: CompilerConfiguration) {
         when(option.optionName){
-            "enabled" ->configuration.put(KEY_ENABLED , value.toBoolean())
+            "enabled" ->configuration.put(KEY_ENABLED, value.toBoolean())
             else -> error("There is no extension named ${option.optionName}")
         }
     }
