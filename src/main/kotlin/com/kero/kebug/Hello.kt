@@ -1,11 +1,11 @@
 package com.kero.kebug
 
 
-@Kebug fun sayHello(b: Int, a:Long) {
+@Kebug fun sayHello(a:Long) {
 }
 
 fun main() {
-    sayHello(0, 5)
+   sayHello(5L)
 }
 
 

@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.codegen.ClassBuilder
 import org.jetbrains.kotlin.codegen.DelegatingClassBuilder
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.descriptors.isTopLevelInPackage
 import org.jetbrains.kotlin.js.descriptorUtils.nameIfStandardType
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.JvmDeclarationOrigin
@@ -45,10 +46,6 @@ class KebugClassBuilder(val kebugBuilder:ClassBuilder , val messageCollector: Me
                 super.visitCode()
                 InstructionAdapter(this).addLogToStartMethode(function)
             }
-
-            override fun visitMethodInsn(opcode: Int, owner: String?, name: String?, descriptor: String?) {
-                super.visitMethodInsn(opcode, owner, name, descriptor)
-            }
         }
     }
     private fun InstructionAdapter.addLogToStartMethode(function : FunctionDescriptor){
@@ -57,8 +54,7 @@ class KebugClassBuilder(val kebugBuilder:ClassBuilder , val messageCollector: Me
         anew(Type.getType(StringBuilder::class.java))
         dup()
         invokespecial("java/lang/StringBuilder", "<init>", "()V", false)
-
-        visitLdcInsn("⇢ ${function.name}(")
+        visitLdcInsn("---> ${function.name}( ")
 
         invokevirtual(
             "java/lang/StringBuilder",
@@ -78,7 +74,7 @@ class KebugClassBuilder(val kebugBuilder:ClassBuilder , val messageCollector: Me
                     invokevirtual("java/lang/StringBuilder", "append", "(I)Ljava/lang/StringBuilder;", false)
                 }
                 "Long" -> {
-                    visitVarInsn(Opcodes.ILOAD, varIndex)
+                    visitVarInsn(Opcodes.LLOAD, varIndex)
                     invokevirtual("java/lang/StringBuilder", "append", "(J)Ljava/lang/StringBuilder;", false)
                 }
                 else -> {
