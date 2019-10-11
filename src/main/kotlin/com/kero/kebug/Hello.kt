@@ -1,13 +1,11 @@
 package com.kero.kebug
 
-class Hello{
-    @Kebug fun sayHello(a:Long) {
-    }
-}
-
+ @Kebug
+ fun sayHello(b:Int) {
+ }
 
 fun main() {
-   Hello().sayHello(5L)
+   sayHello( 30)
 }
 
 

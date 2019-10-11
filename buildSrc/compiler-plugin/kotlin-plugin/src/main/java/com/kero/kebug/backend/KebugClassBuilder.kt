@@ -40,10 +40,6 @@ class KebugClassBuilder(val kebugBuilder:ClassBuilder , val messageCollector: Me
         if(!function.annotations.hasAnnotation(KEBUG_ANNOTATION)){
             return original
         }
-        function.parents.forEach {
-            if(it is ClassDescriptor) log(it)
-        }
-
         return object : MethodVisitor(Opcodes.ASM5, original){
             override fun visitCode() {
                 super.visitCode()
@@ -55,15 +51,11 @@ class KebugClassBuilder(val kebugBuilder:ClassBuilder , val messageCollector: Me
 
 
     private fun InstructionAdapter.addLogToStartMethode(function : FunctionDescriptor){
-        getstatic("java/lang/System", "out", "Ljava/io/PrintStream;")
-
-        anew(Type.getType(StringBuilder::class.java))
-        dup()
-        invokespecial("java/lang/StringBuilder", "<init>", "()V", false)
+        createStringBuilder()
         visitLdcInsn("---> ${function.name}( ")
 
         invokevirtual(
-            "java/lang/StringBuilder",
+            STRING_BUILDER_OWNER,
             "append",
             "(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
             false
@@ -73,7 +65,7 @@ class KebugClassBuilder(val kebugBuilder:ClassBuilder , val messageCollector: Me
             visitLdcInsn("${parameter.name}=")
             invokevirtual("java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false)
 
-            val varIndex = i+1
+            val varIndex = i +if(function.isTopLevelFunction()) 0 else 1
             when (parameter.type.unwrap().nameIfStandardType.toString()) {
                 "Int" -> {
                     visitVarInsn(Opcodes.ILOAD, varIndex)
@@ -109,7 +101,7 @@ class KebugClassBuilder(val kebugBuilder:ClassBuilder , val messageCollector: Me
         }
 
         invokevirtual("java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false)
-
+        //invokestatic("timber/log/Timber","e", "(Ljava/lang/String;[Ljava/lang/Object;)V" , false)
         invokevirtual("java/io/PrintStream", "println", "(Ljava/lang/String;)V", false)
     }
 
