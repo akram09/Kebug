@@ -1,5 +1,8 @@
 package com.kero.kebug.backend
 
+import com.kero.kebug.ANDROID_LOG_ANNOT
+import com.kero.kebug.KEBUG_ANNOT
+import com.kero.kebug.TIMBER_ANNOT
 import jdk.internal.org.objectweb.asm.Opcodes
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
@@ -25,7 +28,9 @@ class KebugClassBuilder(val kebugBuilder:ClassBuilder , val messageCollector: Me
         )
     }
 
-    val KEBUG_ANNOTATION= FqName("com.kero.kebug.Kebug")
+    val KEBUG_ANNOTATION= FqName(KEBUG_ANNOT)
+    val TIMBER_FQ = FqName(TIMBER_ANNOT)
+    val ANDROID_LOG = FqName(ANDROID_LOG_ANNOT)
 
     override fun newMethod(
         origin: JvmDeclarationOrigin,
@@ -51,58 +56,7 @@ class KebugClassBuilder(val kebugBuilder:ClassBuilder , val messageCollector: Me
 
 
     private fun InstructionAdapter.addLogToStartMethode(function : FunctionDescriptor){
-        createStringBuilder()
-        visitLdcInsn("---> ${function.name}( ")
 
-        invokevirtual(
-            STRING_BUILDER_OWNER,
-            "append",
-            "(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
-            false
-        )
-
-        function.valueParameters.forEachIndexed { i, parameter ->
-            visitLdcInsn("${parameter.name}=")
-            invokevirtual("java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false)
-
-            val varIndex = i +if(function.isTopLevelFunction()) 0 else 1
-            when (parameter.type.unwrap().nameIfStandardType.toString()) {
-                "Int" -> {
-                    visitVarInsn(Opcodes.ILOAD, varIndex)
-                    invokevirtual("java/lang/StringBuilder", "append", "(I)Ljava/lang/StringBuilder;", false)
-                }
-                "Long" -> {
-                    visitVarInsn(Opcodes.LLOAD, varIndex)
-                    invokevirtual("java/lang/StringBuilder", "append", "(J)Ljava/lang/StringBuilder;", false)
-                }
-                else -> {
-                    visitVarInsn(Opcodes.ALOAD, varIndex)
-                    invokevirtual(
-                        "java/lang/StringBuilder",
-                        "append",
-                        "(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
-                        false
-                    )
-                }
-            }
-
-            if (i < function.valueParameters.lastIndex) {
-                visitLdcInsn(", ")
-            } else {
-                // if this is the last one, we should append a close-paren instead of a comma
-                visitLdcInsn(")")
-            }
-            invokevirtual(
-                "java/lang/StringBuilder",
-                "append",
-                "(Ljava/lang/String;)Ljava/lang/StringBuilder;",
-                false
-            )
-        }
-
-        invokevirtual("java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false)
-        //invokestatic("timber/log/Timber","e", "(Ljava/lang/String;[Ljava/lang/Object;)V" , false)
-        invokevirtual("java/io/PrintStream", "println", "(Ljava/lang/String;)V", false)
     }
 
 }
